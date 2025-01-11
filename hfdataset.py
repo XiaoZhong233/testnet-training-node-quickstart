@@ -7,7 +7,7 @@ from torch.utils.data import Dataset
 from utils.tool_utils import function_formatter
 
 
-class SFTDataset(Dataset):
+class HFDataset(Dataset):
     def __init__(self, file, tokenizer, max_seq_length, template):
         self.tokenizer = tokenizer
         self.system_format = template["system_format"]
@@ -23,6 +23,7 @@ class SFTDataset(Dataset):
             data_list = f.readlines()
         logger.info("There are {} data in dataset".format(len(data_list)))
         self.data_list = data_list
+        # self.system = "You are a helpful assistant."
 
     def __len__(self):
         return len(self.data_list)
@@ -41,7 +42,7 @@ class SFTDataset(Dataset):
                 input_ids = self.tokenizer.encode(system_text, add_special_tokens=False)
                 target_mask = [0] * len(input_ids)
 
-        conversations = data["conversations"]
+        conversations = data["messages"]
 
         input_buffer = ""
         for i in range(len(conversations)):

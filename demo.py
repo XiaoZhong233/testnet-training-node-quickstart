@@ -7,8 +7,8 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 from trl import SFTTrainer, SFTConfig
 
 from dataset import SFTDataCollator, SFTDataset
+from hfdataset import HFDataset
 from utils.constants import model2template
-
 
 @dataclass
 class LoraTrainingArguments:
@@ -67,7 +67,7 @@ def train_lora(
     )
 
     # Load dataset
-    dataset = SFTDataset(
+    dataset = HFDataset(
         file="data/demo_data.jsonl",
         tokenizer=tokenizer,
         max_seq_length=context_length,
@@ -99,8 +99,8 @@ def train_lora(
 if __name__ == "__main__":
     # Define training arguments for LoRA fine-tuning
     training_args = LoraTrainingArguments(
-        num_train_epochs=10,
-        per_device_train_batch_size=4,
+        num_train_epochs=3,
+        per_device_train_batch_size=2,
         gradient_accumulation_steps=2,
         lora_rank=8,
         lora_alpha=16,
