@@ -67,7 +67,7 @@ def train_lora(
     )
 
     # Load dataset
-    dataset = SFTDataset(
+    dataset = HFDataset(
         file="data/demo_data.jsonl",
         tokenizer=tokenizer,
         max_seq_length=context_length,
