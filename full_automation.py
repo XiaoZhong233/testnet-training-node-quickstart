@@ -37,9 +37,9 @@ if __name__ == "__main__":
     logger.info(f"Models within the max_params: {all_training_args.keys()}")
     # download in chunks
     response = requests.get(data_url, stream=True)
-    with open("data/demo_data.jsonl", "wb") as f:
-        for chunk in response.iter_content(chunk_size=8192):
-            f.write(chunk)
+    # with open("data/demo_data.jsonl", "wb") as f:
+    #     for chunk in response.iter_content(chunk_size=8192):
+    #         f.write(chunk)
 
     # train all feasible models and merge
     for model_id in all_training_args.keys():
