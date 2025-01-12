@@ -67,8 +67,8 @@ def train_lora(
     )
 
     # Load dataset
-    dataset = SFTDataset(
-        file="data/demo_data.jsonl",
+    dataset = HFDataset(
+        file="data/stanford_alpaca_data.jsonl",
         tokenizer=tokenizer,
         max_seq_length=context_length,
         template=model2template[model_id],
