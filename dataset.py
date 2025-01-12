@@ -23,6 +23,7 @@ class SFTDataset(Dataset):
             data_list = f.readlines()
         logger.info("There are {} data in dataset".format(len(data_list)))
         self.data_list = data_list
+        self.system = "You are a helpful assistant."
 
     def __len__(self):
         return len(self.data_list)
