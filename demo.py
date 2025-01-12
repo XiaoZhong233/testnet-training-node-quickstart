@@ -43,17 +43,17 @@ def train_lora(
     )
 
     training_args = SFTConfig(
-        per_device_train_batch_size=8,  # 批次大小，平衡显存和训练速度
-        gradient_accumulation_steps=4,  # 确保总有效批次适中
-        warmup_steps=100,  # 视训练步数动态调整
-        learning_rate=5e-5,  # 小数据建议较小学习率
-        bf16=True,  # 显存支持下启用，节省显存
-        logging_steps=50,  # 训练日志打印频率
-        output_dir="outputs",  # 模型保存路径
-        optim="paged_adamw_8bit",  # 针对大模型优化的 AdamW 变体
-        remove_unused_columns=False,  # LoRA 不需要移除多余列
-        num_train_epochs=3,  # 数据量较少，建议 3~5 次
-        max_seq_length=1024,  # 根据数据长度调整，建议 512
+        per_device_train_batch_size=training_args.per_device_train_batch_size,
+        gradient_accumulation_steps=training_args.gradient_accumulation_steps,
+        warmup_steps=100,
+        learning_rate=2e-4,
+        bf16=True,
+        logging_steps=20,
+        output_dir="outputs",
+        optim="paged_adamw_8bit",
+        remove_unused_columns=False,
+        num_train_epochs=training_args.num_train_epochs,
+        max_seq_length=context_length,
     )
     tokenizer = AutoTokenizer.from_pretrained(
         model_id,
@@ -67,7 +67,7 @@ def train_lora(
     )
 
     # Load dataset
-    dataset = HFDataset(
+    dataset = SFTDataset(
         file="data/demo_data.jsonl",
         tokenizer=tokenizer,
         max_seq_length=context_length,
