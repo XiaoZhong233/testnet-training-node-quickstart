@@ -57,7 +57,7 @@ def train_lora(
         model_id,
         use_fast=True,
     )
-    tokenizer.padding_side = "right"
+    tokenizer.padding_side = 'right'
     model = AutoModelForCausalLM.from_pretrained(
         model_id,
         quantization_config=bnb_config,
