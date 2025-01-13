@@ -26,7 +26,7 @@ def train_lora(
     assert model_id in model2template, f"model_id {model_id} not supported"
     lora_config = LoraConfig(
         r=training_args.lora_rank,
-        target_modules=["q_proj", "o_proj", "k_proj", "v_proj", "gate_proj", "up_proj", "down_proj"],
+        target_modules=["q_proj", "v_proj"],
         lora_alpha=training_args.lora_alpha,
         lora_dropout=training_args.lora_dropout,
         task_type="CAUSAL_LM",
@@ -64,7 +64,6 @@ def train_lora(
         quantization_config=bnb_config,
         device_map={"": 0},
         token=os.environ["HF_TOKEN"],
-        attn_implementation="flash_attention_2"
     )
 
     # Load dataset
