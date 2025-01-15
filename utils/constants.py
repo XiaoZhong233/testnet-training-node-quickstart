@@ -18,12 +18,24 @@ gemma_template = {
     "system": None,
 }
 
+phi_template = {
+    "system_format": None,
+    "user_format": "<|user|>\n{content}<|end|>\n<|assistant|>",
+    "assistant_format": "{content}<|end|>\n",
+    "tool_format": "{content}",
+    "function_format": "{content}",
+    "observation_format": "<|tool|>\n{content}<|end|>\n<|assistant|>",
+    "system": None,
+}
+
+
 model2template = {
     "Qwen/Qwen1.5-0.5B": qwen_template,
     "Qwen/Qwen1.5-1.8B": qwen_template,
     "Qwen/Qwen1.5-7B": qwen_template,
     "google/gemma-2b": gemma_template,
     "google/gemma-7b": gemma_template,
+    "microsoft/Phi-3-small-8k-instruct": phi_template,
 }
 
 model2size = {
@@ -32,6 +44,7 @@ model2size = {
     "Qwen/Qwen1.5-7B": 7_720_000_000,
     "google/gemma-2b": 2_510_000_000,
     "google/gemma-7b": 8_540_000_000,
+    "microsoft/Phi-3-small-8k-instruct": 7_000_000_000,
 }
 
 model2base_model = {
@@ -40,4 +53,5 @@ model2base_model = {
     "Qwen/Qwen1.5-7B": "qwen1.5",
     "google/gemma-2b": "gemma",
     "google/gemma-7b": "gemma",
+    "microsoft/Phi-3-small-8k-instruct": "phi3",
 }
