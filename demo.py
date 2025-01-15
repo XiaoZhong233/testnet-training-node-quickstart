@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 import torch
 from peft import LoraConfig
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, pipeline
 from trl import SFTTrainer, SFTConfig
 
 from dataset import SFTDataCollator, SFTDataset
@@ -40,13 +40,6 @@ def train_lora(
         task_type="CAUSAL_LM",
     )
 
-    # 量化配置
-    bnb_config = BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_quant_type="nf4",
-        bnb_4bit_compute_dtype=torch.bfloat16,
-        bnb_4bit_use_double_quant=False,
-    )
 
     # 训练配置
     training_config = SFTConfig(
@@ -64,30 +57,21 @@ def train_lora(
         max_seq_length=context_length,
     )
 
-    # 加载 tokenizer
+
+    model = AutoModelForCausalLM.from_pretrained(
+        model_id,
+        torch_dtype="auto",
+        trust_remote_code=True,
+        token=os.environ.get("HF_TOKEN")
+    )
+    assert torch.cuda.is_available(), "This model needs a GPU to run ..."
+    device = torch.cuda.current_device()
+    model = model.to(device)
     tokenizer = AutoTokenizer.from_pretrained(
         model_id,
         trust_remote_code=True,
         token=os.environ.get("HF_TOKEN"),
     )
-    tokenizer.pad_token = tokenizer.eos_token
-    tokenizer.padding_side = "right"
-
-    # 加载模型
-    model = AutoModelForCausalLM.from_pretrained(
-        model_id,
-        quantization_config=bnb_config,
-        device_map={"": 0},
-        token=os.environ.get("HF_TOKEN"),
-        trust_remote_code=True,
-        torch_dtype=torch.bfloat16,
-        # attn_implementation="flash_attention_2",
-    )
-
-    # 确保模型参数是 bf16
-    for param in model.parameters():
-        if param.dtype == torch.float32:
-            param.data = param.data.to(torch.bfloat16)
 
     # 创建数据集
     dataset = SFTDataset(
@@ -96,6 +80,7 @@ def train_lora(
         max_seq_length=context_length,
         template=model2template[model_id],
     )
+
     # Define trainer
     trainer = SFTTrainer(
         model=model,
