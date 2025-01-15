@@ -65,8 +65,8 @@ def train_lora(
         token=os.environ.get("HF_TOKEN")
     )
     assert torch.cuda.is_available(), "This model needs a GPU to run ..."
-    device = torch.cuda.current_device()
-    model = model.to(device)
+    # device = torch.cuda.current_device()
+    # model = model.to(device)
     tokenizer = AutoTokenizer.from_pretrained(
         model_id,
         trust_remote_code=True,
