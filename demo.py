@@ -26,7 +26,7 @@ def train_lora(
     assert model_id in model2template, f"model_id {model_id} not supported"
     lora_config = LoraConfig(
         r=training_args.lora_rank,  # LoRA rank, reduce to save memory
-        target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],
+        target_modules=["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
         lora_alpha=training_args.lora_alpha,
         lora_dropout=training_args.lora_dropout,
         task_type="CAUSAL_LM",
