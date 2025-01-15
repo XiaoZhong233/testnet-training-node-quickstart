@@ -19,7 +19,7 @@ class LoraTrainingArguments:
 
 
 def train_lora(
-        model_id: str, context_length: int, training_args: LoraTrainingArguments
+    model_id: str, context_length: int, training_args: LoraTrainingArguments
 ):
     assert model_id in model2template, f"model_id {model_id} not supported"
     lora_config = LoraConfig(
@@ -70,15 +70,15 @@ def train_lora(
         device_map={"": 0},
         token=os.environ.get("HF_TOKEN"),
         trust_remote_code=True,
-        torch_dtype=torch.bfloat16,
+        torch_dtype=torch.bfloat16,  # 强制设置模型为 bfloat16 类型
         attn_implementation="flash_attention_2",
     )
 
-    # 确保模型参数是 bf16
+    # 确保模型参数是浮点类型并启用梯度计算
     for param in model.parameters():
+        if param.dtype not in [torch.float32, torch.float16, torch.bfloat16]:
+            raise ValueError(f"Parameter {param} has unsupported dtype {param.dtype}")
         param.requires_grad = True  # 确保启用梯度计算
-        if param.dtype == torch.float32:
-            param.data = param.data.to(torch.bfloat16)
 
     # 创建数据集
     dataset = SFTDataset(
@@ -108,6 +108,7 @@ def train_lora(
 
     # upload lora weights and tokenizer
     print("Training Completed.")
+
 
 
 def print_model_structure(model_id: str):
