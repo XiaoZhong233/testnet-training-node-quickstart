@@ -81,7 +81,7 @@ def train_lora(
         token=os.environ.get("HF_TOKEN"),
         trust_remote_code=True,
         torch_dtype=torch.bfloat16,
-        attn_implementation="flash_attention_2",
+        # attn_implementation="flash_attention_2",
     )
 
     # 确保模型参数是 bf16
