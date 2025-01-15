@@ -41,7 +41,7 @@
 microsoft/Phi-3-small-8k-instruct:
   per_device_train_batch_size: 1
   gradient_accumulation_steps: 8
-  num_train_epochs: 6
+  num_train_epochs: 5
   lora_rank: 4
   lora_alpha: 8
   lora_dropout: 0.1
