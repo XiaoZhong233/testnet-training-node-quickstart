@@ -19,12 +19,12 @@ gemma_template = {
 }
 
 phi_template = {
-    "system_format": None,
-    "user_format": "<|user|>\n{content}<|end|>\n<|assistant|>",
-    "assistant_format": "{content}<|end|>\n",
+    "system_format": "<bos>",
+    "user_format": "<start_of_turn>user\n{content}<end_of_turn>\n<start_of_turn>model\n",
+    "assistant_format": "{content}<eos>\n",
     "tool_format": "{content}",
     "function_format": "{content}",
-    "observation_format": "<|tool|>\n{content}<|end|>\n<|assistant|>",
+    "observation_format": "<start_of_turn>tool\n{content}<end_of_turn>\n<start_of_turn>model\n",
     "system": None,
 }
 

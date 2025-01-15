@@ -48,7 +48,7 @@ class SFTDataset(Dataset):
         for i in range(len(conversations)):
             role = conversations[i]["role"]
             content = conversations[i]["content"].strip()
-            # 用户提问内容
+
             if role != "assistant":
                 if role == "user":
                     human = self.user_format.format(
@@ -64,7 +64,6 @@ class SFTDataset(Dataset):
                 elif role == "observation":
                     observation = self.observation_format.format(content=content)
                     input_buffer += observation
-            #助手回答内容
             else:
                 assistant = self.assistant_format.format(
                     content=content, stop_token=self.tokenizer.eos_token
